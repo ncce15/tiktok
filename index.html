@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Ce față ai făcut 😂</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #111;
+      color: white;
+      padding: 2em;
+    }
+    video, canvas {
+      margin-top: 1em;
+      border-radius: 12px;
+      max-width: 90%;
+    }
+    #prank-message {
+      font-size: 1.5em;
+      margin-top: 1em;
+      color: #00ff99;
+    }
+  </style>
+</head>
+<body>
+  <h1>Permite accesul la cameră pentru o surpriză!</h1>
+  <video id="video" autoplay playsinline width="320" height="240"></video>
+  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+  <p id="prank-message"></p>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const prankMessage = document.getElementById('prank-message');
+
+    // Cere permisiune pentru cameră
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;ChatGPT-OpenAI
+
+
+        // Așteptăm 2 secunde, apoi facem poza
+        setTimeout(() => {
+          const context = canvas.getContext('2d');
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          // Oprim camera
+          stream.getTracks().forEach(track => track.stop());
+
+          // Ascundem video, arătăm poza
+          video.style.display = 'none';
+          canvas.style.display = 'block';
+
+          // Mesaj prank
+          prankMessage.innerText = "Așa te-ai uitat când ai intrat 😂";
+        }, 2000);
+      })
+      .catch(err => {
+        prankMessage.innerText = "Ai refuzat camera 😢. Fără surpriză!";
+      });
+  </script>
+</body>
+</html>
